@@ -1,6 +1,3 @@
-import re
-from typing import Optional
-
 class Mods:
     def __init__(self, mods=None):
         self.mods = mods or []
