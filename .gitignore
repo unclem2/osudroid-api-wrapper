@@ -1,1 +1,4 @@
 *.pyc
+dist/
+.env
+src/osudroid_api_wrapper.egg-info/
