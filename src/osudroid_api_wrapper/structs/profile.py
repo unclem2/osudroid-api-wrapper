@@ -1,5 +1,5 @@
-from classes.score import Score
-from classes.base.player import Player
+from ..classes.score import Score
+from ..classes.base.player import Player
 from typing import List
 import bs4
 import requests

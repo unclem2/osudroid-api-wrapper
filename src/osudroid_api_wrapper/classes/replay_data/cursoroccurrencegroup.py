@@ -25,8 +25,8 @@ SOFTWARE.
 """
 
 from typing import List, Optional
-from classes.replay_data.cursoroccurrence import CursorOccurrence
-from classes.replay_data.movementtype import MovementType
+from .cursoroccurrence import CursorOccurrence
+from .movementtype import MovementType
 
 
 class CursorOccurrenceGroup:

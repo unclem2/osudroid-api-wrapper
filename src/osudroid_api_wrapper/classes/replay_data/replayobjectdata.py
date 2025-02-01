@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import classes.replay_data.hitresult as hitresult
+from . import hitresult
 from typing import Optional, List
 
 class ReplayObjectData:

@@ -60,6 +60,8 @@ class Beatmap:
             }
             response = requests.get(url, params=params)
             data = response.json()
+            if len(data) == 0:
+                return None
             data = data[0]
 
         elif md5 is not None:

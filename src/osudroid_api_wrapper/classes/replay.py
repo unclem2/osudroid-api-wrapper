@@ -31,10 +31,10 @@ from stream_unzip import stream_unzip
 import javaobj
 import struct
 import io
-from classes.replay_data.movementtype import MovementType
-from classes.replay_data.cursordata import CursorData
-from classes.replay_data.hitresult import HitResult
-from classes.replay_data.replayobjectdata import ReplayObjectData
+from .replay_data.movementtype import MovementType
+from .replay_data.cursordata import CursorData
+from .replay_data.hitresult import HitResult
+from .replay_data.replayobjectdata import ReplayObjectData
 
 
 class Replay:

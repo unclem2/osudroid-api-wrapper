@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "osudroid-api-wrapper"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
-  { name="unclem", email="mannringyt11@gmail.com" },
+  { name="unclem", email="mannringyt11@gmail.com" }
 ]
 description = "Python api wrapper for osu!droid"
 readme = "README.md"
@@ -29,5 +29,6 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/unclem2/osudroid-api-wrapper"
 Issues = "https://github.com/unclem2/osudroid-api-wrapper/issues"
+
 
 

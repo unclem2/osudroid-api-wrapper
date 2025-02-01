@@ -1,6 +1,6 @@
-from classes.base.player import Player
-from classes.base.beatmap import Beatmap
-from classes.base.mods import Mods
+from .base.player import Player
+from .base.beatmap import Beatmap
+from .base.mods import Mods
 import datetime
 from typing import List
 
