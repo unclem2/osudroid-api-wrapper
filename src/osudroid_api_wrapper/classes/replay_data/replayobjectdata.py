@@ -34,5 +34,13 @@ class ReplayObjectData:
         self.tickset:List[bool] = tickset
         self.result:hitresult.HitResult = result
         
+    @property
+    def to_dict(self):
+        return {
+            "accuracy": self.accuracy,
+            "tickset": self.tickset,
+            "result": self.result
+        }
+        
     
         

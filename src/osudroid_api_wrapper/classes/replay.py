@@ -192,7 +192,7 @@ class Replay:
 
         self.replay_obj = javaobj.v2.loads(data_buffer.getvalue())
 
-        for fields in self.replay_obj[0].to_dict['field_data'].values():
+        for fields in self.replay_obj[0].__dict__['field_data'].values():
             for field, value in fields.items():
                 if field.name == 'version':
                     self.version = value
@@ -207,7 +207,7 @@ class Replay:
              self.hit0, self.score, self.combo) = struct.unpack(">Qiiiiiiii", io.BytesIO(self.replay_obj[4].data).read(40))
             self.username = self.replay_obj[5].value
 
-            for field in self.replay_obj[6].to_dict['field_data'].values():
+            for field in self.replay_obj[6].__dict__['field_data'].values():
                 for field, value in field.items():
                     if field.name == "elements":
                         for element in value:
@@ -248,10 +248,12 @@ class Replay:
         self.__parse_movement_data(replay_data.getvalue())
         print(self.__buffer_offset)
         self.__parse_hitresult_data(replay_data.getvalue())
+        
+        return self
 
     def __str__(self):
         string = ""
-        for key, value in self.to_dict.items():
+        for key, value in self.__dict__.items():
             if key == "replay_obj" or key == "replay_file" or key == "cursor_data":
                 continue
 
