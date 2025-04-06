@@ -31,6 +31,7 @@ from stream_unzip import stream_unzip
 import javaobj
 import struct
 import io
+from .base.mods import Mods
 from .replay_data.movementtype import MovementType
 from .replay_data.cursordata import CursorData
 from .replay_data.hitresult import HitResult
@@ -53,8 +54,10 @@ class Replay:
         self.hit0: int = 0
         self.score: int = 0
         self.combo: int = 0
+        self.rank: str = None
+        self.accuracy: float = 0.0
         self.username: str = None
-        self.parsed_mods: list = []
+        self.parsed_mods: Mods = []
         self.converted_mods: list = []
         self.__buffer_offset: int = 0
         self.cursor_data: list = []
@@ -65,6 +68,43 @@ class Replay:
             while chunk := f.read(65536):
                 yield chunk
 
+    def __calculate_rank(self):
+        total_hits = self.hit300 + self.hit100 + self.hit50 + self.hit0
+        have_h_mods = False
+        for mod in self.converted_mods:
+            if mod == "HD" or mod == "FL":
+                have_h_mods = True
+                break
+        hit300ratio = self.hit300 / total_hits
+        
+        if hit300ratio == 1:
+            self.rank = "XH" if have_h_mods else "X"
+            return self
+        elif hit300ratio >= 0.9:
+            if self.hit50 / total_hits <= 0.01 and self.hit0 == 0:
+                self.rank = "SH" if have_h_mods else "S"
+                return self
+            self.rank = "A"
+            return self
+        elif hit300ratio >= 0.8:
+            if self.hit0 == 0:
+                self.rank = "A"
+                return self
+            self.rank = "B"
+            return self
+        elif hit300ratio >= 0.7:
+            if self.hit0 == 0:
+                self.rank = "B"
+                return self
+            self.rank = "C"
+            return self
+        elif hit300ratio >= 0.6:
+            self.rank = "C"
+            return self 
+        else:
+            self.rank = "D"
+            return self
+        
 
 
     def __read_byte(self, replay_data):
@@ -86,33 +126,6 @@ class Replay:
         replay_data.seek(self.__buffer_offset)
         self.__buffer_offset += 4
         return struct.unpack(">f", replay_data.read(4))[0]
-
-    def __droid_replay_mods_to_std(self):
-        mod_mapping = {
-            "MOD_NOFAIL": "NF",
-            "MOD_EASY": "EZ",
-            "MOD_HIDDEN": "HD",
-            "MOD_HARDROCK": "HR",
-            "MOD_SUDDENDEATH": "SD",
-            "MOD_DOUBLETIME": "DT",
-            "MOD_RELAX": "RX",
-            "MOD_HALFTIME": "HT",
-            "MOD_NIGHTCORE": "NC",
-            "MOD_FLASHLIGHT": "FL",
-            "MOD_SCOREV2": "V2",
-            "MOD_AUTOPILOT": "AP",
-            "MOD_AUTO": "AT",
-            "MOD_PRECISE": "PR",
-            "MOD_REALLYEASY": "REZ",
-            "MOD_SMALLCIRCLES": "SC",
-            "MOD_PERFECT": "PF",
-            "MOD_SUDDENDEATH": "SU",
-        }
-
-        for mod in self.parsed_mods:
-            if mod in mod_mapping:
-                self.converted_mods.append(mod_mapping[mod])
-        return self.converted_mods
 
     def __parse_movement_data(self, replay_data):
         replay_data = io.BytesIO(replay_data)
@@ -214,7 +227,9 @@ class Replay:
                             self.parsed_mods.append(element.value)
                         break
 
-            self.__droid_replay_mods_to_std()
+            self.converted_mods = Mods.from_droid_replay(self.parsed_mods).mods
+            self.accuracy = round(((300 * self.hit300 + 100 * self.hit100 + 50 * self.hit50) / (300 * (self.hit300 + self.hit100 + self.hit50 + self.hit0))) * 100, 2)
+            self.__calculate_rank()
 
         if self.version >= 4:
             modifiers = self.replay_obj[7].value.split("|")
@@ -248,6 +263,8 @@ class Replay:
         self.__parse_movement_data(replay_data.getvalue())
         print(self.__buffer_offset)
         self.__parse_hitresult_data(replay_data.getvalue())
+        
+        
         
         return self
 
