@@ -13,7 +13,7 @@ class Mods:
         return cls([mod_abbreviations.get(mod, mod) for mod in mods.split(",")])
 
     @classmethod
-    def from_droid_replay(cls, mods: str):
+    def from_droid_replay(cls, mods: list):
         mod_mapping = {
             "MOD_NOFAIL": "NF", "MOD_EASY": "EZ", "MOD_HIDDEN": "HD",
             "MOD_HARDROCK": "HR", "MOD_SUDDENDEATH": "SD", "MOD_DOUBLETIME": "DT",
@@ -22,7 +22,7 @@ class Mods:
             "MOD_AUTO": "AT", "MOD_PRECISE": "PR", "MOD_REALLYEASY": "REZ",
             "MOD_SMALLCIRCLES": "SC", "MOD_PERFECT": "PF", "MOD_SUDDENDEATH": "SU",
         }
-        return cls([mod_mapping.get(mod, mod) for mod in mods.split(",")])
+        return cls([mod_mapping.get(mod, mod) for mod in mods])
 
     @classmethod
     def from_droid_api(cls, mods: dict):
@@ -31,3 +31,9 @@ class Mods:
         return instance
 
 
+    @property
+    def to_dict(self):
+        return {
+            "mods": self.mods,
+            "speed_multiplier": self.speed_multiplier
+        }
