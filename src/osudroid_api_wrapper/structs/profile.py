@@ -56,6 +56,7 @@ class Profile():
         resp = requests.get(url)
         soup = bs4.BeautifulSoup(resp.text, 'html.parser')
         profile.player = Player._parse_from_bsoup(soup)
+        profile.player.uid = uid
         profile.__get_recent_scores(soup)
         profile.__get_top_scores(soup)
         return profile
