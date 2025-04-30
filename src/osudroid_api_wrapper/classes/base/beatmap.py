@@ -41,6 +41,7 @@ class Beatmap:
         self.title: str = None
         self.version: str = None
         self.creator: str = None
+        self.combo: int = None
         self.ar: float = None
         self.od: float = None
         self.hp: float = None
@@ -53,6 +54,8 @@ class Beatmap:
     def get_beatmap(cls, beatmap_id: int = None, md5: str = None) -> 'Beatmap':
         beatmap = cls()
         url = "https://old.ppy.sh/api/get_beatmaps"
+        if key is "":
+            raise ValueError("API key is not set. Please set the OSU_API_KEY environment variable.")
         if beatmap_id is not None:
             params = {
             "k": key,
@@ -73,6 +76,8 @@ class Beatmap:
             data = response.json()
             if len(data) == 0:
                 return None
+            if data == []:
+                return None
             data = data[0]
 
         beatmap.beatmap_id = int(data["beatmap_id"])
@@ -89,6 +94,7 @@ class Beatmap:
         beatmap.bpm = float(data["bpm"])
         beatmap.star = float(data["difficultyrating"])
         beatmap.length = int(data["total_length"])
+        beatmap.combo = int(data["max_combo"])
         
         return beatmap
 
@@ -109,6 +115,6 @@ class Beatmap:
             "cs": self.cs,
             "bpm": self.bpm,
             "star": self.star,
-            "length": self.length
-
+            "length": self.length,
+            "combo": self.combo
         }
