@@ -29,7 +29,6 @@ import os
 import requests
 
 dotenv.load_dotenv()
-key = os.getenv("OSU_API_KEY")
 
 
 class Beatmap:
@@ -51,16 +50,17 @@ class Beatmap:
         self.length: int = None
 
     @classmethod
-    def get_beatmap(cls, beatmap_id: int = None, md5: str = None) -> 'Beatmap':
+    def get_beatmap(cls, beatmap_id: int = None, md5: str = None) -> "Beatmap":
+        key = os.getenv("OSU_API_KEY")
+
         beatmap = cls()
         url = "https://old.ppy.sh/api/get_beatmaps"
         if key is "":
-            raise ValueError("API key is not set. Please set the OSU_API_KEY environment variable.")
+            raise ValueError(
+                "API key is not set. Please set the OSU_API_KEY environment variable."
+            )
         if beatmap_id is not None:
-            params = {
-            "k": key,
-            "b": beatmap_id
-            }
+            params = {"k": key, "b": beatmap_id}
             response = requests.get(url, params=params)
             data = response.json()
             if len(data) == 0:
@@ -68,10 +68,7 @@ class Beatmap:
             data = data[0]
 
         elif md5 is not None:
-            params = {
-                "k": key,
-                "h": md5
-            }
+            params = {"k": key, "h": md5}
             response = requests.get(url, params=params)
             data = response.json()
             if len(data) == 0:
@@ -95,9 +92,8 @@ class Beatmap:
         beatmap.star = float(data["difficultyrating"])
         beatmap.length = int(data["total_length"])
         beatmap.combo = int(data["max_combo"])
-        
-        return beatmap
 
+        return beatmap
 
     @property
     def to_dict(self):
@@ -116,5 +112,5 @@ class Beatmap:
             "bpm": self.bpm,
             "star": self.star,
             "length": self.length,
-            "combo": self.combo
+            "combo": self.combo,
         }

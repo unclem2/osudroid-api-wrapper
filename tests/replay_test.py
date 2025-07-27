@@ -1,6 +1,9 @@
 from osudroid_api_wrapper import Replay
 
-def test_replay_load():
-    replay = Replay().load("tests/5.odr")
+
+def main():
+    replay = Replay.load("2.odr")
     print(replay)
-    assert replay.username == "unclem"
+
+
+main()

@@ -1,5 +1,3 @@
 from .replay import Replay
 from .score import Score
-from .base import Mods, Player, Beatmap
-
-
+from .base import ModList, Player, Beatmap, mods

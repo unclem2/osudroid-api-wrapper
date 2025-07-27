@@ -1,5 +1,5 @@
 """
-Rewrite of the CursorData class of rian8337/osu-droid-replay-analyzer 
+Rewrite of the CursorData class of rian8337/osu-droid-replay-analyzer
 https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorData.ts
 
 MIT License
@@ -65,10 +65,7 @@ class CursorData:
         # Handle any remaining occurrences
         if down_occurrence and move_occurrences:
             self.occurrence_groups.append(
-                CursorOccurrenceGroup(
-                    down=down_occurrence,
-                    moves=move_occurrences
-                )
+                CursorOccurrenceGroup(down=down_occurrence, moves=move_occurrences)
             )
 
     @property

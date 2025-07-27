@@ -27,20 +27,23 @@ SOFTWARE.
 from . import hitresult
 from typing import Optional, List
 
+
 class ReplayObjectData:
-    
-    def __init__(self, accuracy:Optional[float], tickset:Optional[List[bool]], result:hitresult.HitResult):
-        self.accuracy:float = accuracy
-        self.tickset:List[bool] = tickset
-        self.result:hitresult.HitResult = result
-        
+
+    def __init__(
+        self,
+        accuracy: Optional[float],
+        tickset: Optional[List[bool]],
+        result: hitresult.HitResult,
+    ):
+        self.accuracy: float = accuracy
+        self.tickset: List[bool] = tickset
+        self.result: hitresult.HitResult = result
+
     @property
     def to_dict(self):
         return {
             "accuracy": self.accuracy,
             "tickset": self.tickset,
-            "result": self.result
+            "result": self.result,
         }
-        
-    
-        

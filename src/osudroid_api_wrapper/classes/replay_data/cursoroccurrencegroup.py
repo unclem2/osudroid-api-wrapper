@@ -1,4 +1,4 @@
-""" Rewrite of the CursorOccurrenceGroup class of rian8337/osu-droid-replay-analyzer
+"""Rewrite of the CursorOccurrenceGroup class of rian8337/osu-droid-replay-analyzer
 https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorOccurrenceGroup.ts
 
 MIT License
@@ -30,12 +30,16 @@ from .movementtype import MovementType
 
 
 class CursorOccurrenceGroup:
-    def __init__(self, down: CursorOccurrence,
-                 moves: List[CursorOccurrence], up: Optional[CursorOccurrence] = None):
+    def __init__(
+        self,
+        down: CursorOccurrence,
+        moves: List[CursorOccurrence],
+        up: Optional[CursorOccurrence] = None,
+    ):
         self._down = down
         self._moves = moves
-        self.down = down  
-        self.up = up  
+        self.down = down
+        self.up = up
 
     @property
     def down(self) -> CursorOccurrence:
@@ -45,7 +49,8 @@ class CursorOccurrenceGroup:
     def down(self, value: CursorOccurrence):
         if value.id != MovementType.DOWN:
             raise TypeError(
-                "Attempting to set the down cursor occurrence to one with a different movement type.")
+                "Attempting to set the down cursor occurrence to one with a different movement type."
+            )
         self._down = value
 
     @property
@@ -60,7 +65,8 @@ class CursorOccurrenceGroup:
     def up(self, value: Optional[CursorOccurrence]):
         if value and value.id != MovementType.UP:
             raise TypeError(
-                "Attempting to set the up cursor occurrence to one with a different movement type.")
+                "Attempting to set the up cursor occurrence to one with a different movement type."
+            )
         self._up = value
 
     @property
@@ -69,8 +75,11 @@ class CursorOccurrenceGroup:
 
     @property
     def end_time(self) -> int:
-        return self._up.time if self._up else (
-            self._moves[-1].time if self._moves else self._down.time)
+        return (
+            self._up.time
+            if self._up
+            else (self._moves[-1].time if self._moves else self._down.time)
+        )
 
     @property
     def duration(self) -> int:
@@ -116,5 +125,5 @@ class CursorOccurrenceGroup:
         return {
             "down": self._down.to_dict,
             "moves": [move.to_dict for move in self._moves],
-            "up": self._up.to_dict if self._up else None
+            "up": self._up.to_dict if self._up else None,
         }
