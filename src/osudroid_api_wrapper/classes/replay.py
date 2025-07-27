@@ -30,6 +30,7 @@ import javaobj.v2.transformers
 from stream_unzip import stream_unzip
 import javaobj
 import struct
+import json
 import io
 from .base.modlist import ModList
 from .replay_data.movementtype import MovementType
@@ -227,14 +228,19 @@ class Replay:
             )
             replay.username = replay.replay_obj[5].value
 
-            for field in replay.replay_obj[6].__dict__["field_data"].values():
-                for field, value in field.items():
-                    if field.name == "elements":
-                        for element in value:
-                            replay.parsed_mods.append(element.value)
-                        break
+            if replay.version <= 6:
+                for field in replay.replay_obj[6].__dict__["field_data"].values():
+                    for field, value in field.items():
+                        if field.name == "elements":
+                            for element in value:
+                                replay.parsed_mods.append(element.value)
+                            break
 
-            replay.converted_mods = ModList.from_droid_replay_v6(replay.parsed_mods)
+                replay.converted_mods = ModList.from_droid_replay_v6(replay.parsed_mods)
+            else:
+                replay.converted_mods = ModList.from_dict(
+                    json.loads(replay.replay_obj[6].value)
+                )
             replay.accuracy = round(
                 (
                     (300 * replay.hit300 + 100 * replay.hit100 + 50 * replay.hit50)
@@ -248,7 +254,7 @@ class Replay:
             )
             replay.__calculate_rank()
 
-        if replay.version >= 4:
+        if replay.version >= 4 and replay.version <= 6:
             modifiers = replay.replay_obj[7].value.split("|")
             for modifier in modifiers:
                 if modifier.startswith("AR"):
@@ -291,9 +297,9 @@ class Replay:
         buffer_index = 0
         if replay.version <= 2:
             buffer_index = 4
-        elif replay.version == 3:
+        elif replay.version == 3 or replay.version == 7:
             buffer_index = 7
-        elif replay.version >= 4:
+        elif replay.version >= 4 and replay.version <= 6:
             buffer_index = 8
 
         replay_data = io.BytesIO()
