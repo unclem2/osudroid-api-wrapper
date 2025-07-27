@@ -27,3 +27,4 @@ from .mod_synesthesia import ModSynesthesia
 from .mod_customspeed import ModCustomSpeed
 from .mod_difficultyadjust import ModDifficultyAdjust
 from .settings import SettingsList, Setting
+from .mod_smallcircles import ModSmallCircles

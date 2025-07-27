@@ -27,6 +27,7 @@ from .mods import (
     ModRandom,
     ModMirror,
     ModFreezeFrame,
+    ModSmallCircles,
 )
 from typing import List
 import re
@@ -94,7 +95,7 @@ class ModList:
             "MOD_AUTO": ModAuto,
             "MOD_PRECISE": ModPrecise,
             "MOD_REALLYEASY": ModReallyEasy,
-            "MOD_SMALLCIRCLES": ModSynesthesia,
+            "MOD_SMALLCIRCLES": ModSmallCircles,
             "MOD_PERFECT": ModPerfect,
             "MOD_SUDDENDEATH": ModSuddenDeath,
         }
