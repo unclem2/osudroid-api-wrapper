@@ -28,6 +28,7 @@ import enum
 
 
 class HitResult(enum.Enum):
+    WHY = 0
     MISS = 1
     MEH = 2
     GOOD = 3

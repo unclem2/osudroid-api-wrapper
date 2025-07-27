@@ -1,9 +1,6 @@
 from osudroid_api_wrapper import Replay
+import pytest
 
-
-def main():
-    replay = Replay.load("tests/7.odr")
-    print(replay)
-
-
-main()
+def test_replay():
+    score = Replay.load("tests/wtf.odr")
+    print(score)

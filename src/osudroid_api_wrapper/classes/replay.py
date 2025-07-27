@@ -181,6 +181,8 @@ class Replay:
                     )
 
             replay_object_data.result = HitResult(self.__read_byte(replay_data))
+            if replay_object_data.result == HitResult.WHY:
+                print("reached the end of hitresult data, most likely a bug")
             self.hit_result_data.append(replay_object_data.to_dict)
 
     @classmethod
