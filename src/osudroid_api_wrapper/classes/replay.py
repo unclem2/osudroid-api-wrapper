@@ -268,7 +268,7 @@ class Replay:
                 if modifier.startswith("x"):
                     replay.speed_multiplier = float(modifier.replace("x", "") or 1)
                     replay.converted_mods.add_mod(
-                        ModCustomSpeed(rate_multiplier=replay.speed_multiplier)
+                        ModCustomSpeed(rateMultiplier=replay.speed_multiplier)
                     )
 
                 if modifier.startswith("FLD"):
@@ -277,7 +277,7 @@ class Replay:
                         fl.settings.set_value("areaFollowDelay", replay.fl_delay)
                     else:
                         replay.converted_mods.add_mod(
-                            ModFlashlight(area_follow_delay=replay.fl_delay)
+                            ModFlashlight(areaFollowDelay=replay.fl_delay)
                         )
             if (
                 hasattr(replay, "force_ar")
