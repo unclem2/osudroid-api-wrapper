@@ -28,6 +28,7 @@ from .mods import (
     ModMirror,
     ModFreezeFrame,
     ModSmallCircles,
+    ModReplayV6,
 )
 from typing import List
 import re

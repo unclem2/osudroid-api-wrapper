@@ -37,7 +37,7 @@ from .replay_data.movementtype import MovementType
 from .replay_data.cursordata import CursorData
 from .replay_data.hitresult import HitResult
 from .replay_data.replayobjectdata import ReplayObjectData
-from .base.mods import ModDifficultyAdjust, ModFlashlight, ModCustomSpeed
+from .base.mods import ModDifficultyAdjust, ModFlashlight, ModCustomSpeed, ModReplayV6
 
 
 class Replay:
@@ -239,6 +239,7 @@ class Replay:
                             break
 
                 replay.converted_mods = ModList.from_droid_replay_v6(replay.parsed_mods)
+                replay.converted_mods.add_mod(ModReplayV6())
             else:
                 replay.converted_mods = ModList.from_dict(
                     json.loads(replay.replay_obj[6].value)

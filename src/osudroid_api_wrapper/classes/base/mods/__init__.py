@@ -28,3 +28,4 @@ from .mod_customspeed import ModCustomSpeed
 from .mod_difficultyadjust import ModDifficultyAdjust
 from .settings import SettingsList, Setting
 from .mod_smallcircles import ModSmallCircles
+from .mod_replayv6 import ModReplayV6
