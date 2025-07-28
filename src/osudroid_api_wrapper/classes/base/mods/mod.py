@@ -32,8 +32,6 @@ class Mod(ABC):
     @acronym.setter
     def acronym(self, new_acronym: str):
         """Set the acronym of the mod."""
-        if len(new_acronym) > 2:
-            raise ValueError("Acronym must be 2 characters.")
         if self.__acronym is not None:
             raise ValueError("Acronym can only be set once.")
         self.__acronym = new_acronym
