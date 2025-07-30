@@ -68,7 +68,7 @@ class Mod(ABC):
             "acronym": self.__acronym,
         }
         if self.__settings.as_calculatable:
-            ret.update(self.__settings.as_calculatable)
+            ret["settings"] = self.__settings.as_calculatable
         return ret
 
     @property
