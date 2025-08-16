@@ -43,7 +43,7 @@ class ModApproachDifferent(Mod):
         self.settings.add_setting(
             Setting(
                 name="style",
-                default_value=ApproachStyle.LINEAR,
+                default_value=ApproachStyle.LINEAR.value,
                 value=style,
                 min_value=0,
                 max_value=len(ApproachStyle) - 1,
