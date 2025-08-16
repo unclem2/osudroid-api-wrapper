@@ -233,21 +233,29 @@ class ModList:
     @property
     def as_json(self) -> List[dict]:
         """Return the mod list as a JSON serializable list with full mod details."""
+        if not self.__mods:
+            return []
         return [mod.as_json for mod in self.__mods]
 
     @property
     def as_standard_mods(self) -> str:
         """Return the mod list as a string of mod acronyms and settings."""
+        if not self.__mods:
+            return ""
         return "".join(mod.as_standard_mod for mod in self.__mods if mod.acronym)
 
     @property
     def as_calculatable_mods(self) -> list:
         """Return the mod list as a string of mods suitable for pp calculation."""
+        if not self.__mods:
+            return []
         return [mod.as_calculatable for mod in self.__mods]
 
     @property
     def as_json_string(self) -> str:
         """Return the mod list as a JSON string."""
+        if not self.__mods:
+            return "[]"
         return json.dumps(self.as_calculatable_mods, separators=(",", ":"))
 
     def __iter__(self):
