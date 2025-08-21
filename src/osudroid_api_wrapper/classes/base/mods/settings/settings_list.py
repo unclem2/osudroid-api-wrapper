@@ -29,12 +29,14 @@ class SettingsList:
         for setting in self.__settings:
             if setting.name == name:
                 return setting
+            if name in setting.alternative_names:
+                return setting
         return None
 
     def remove_setting(self, name: str):
         """Remove a setting by its name."""
         self.__settings = [
-            setting for setting in self.__settings if setting.name != name
+            setting for setting in self.__settings if setting.name != name and name not in setting.alternative_names
         ]
 
     def set_value(self, name: str, value: bool | int | float | str):
