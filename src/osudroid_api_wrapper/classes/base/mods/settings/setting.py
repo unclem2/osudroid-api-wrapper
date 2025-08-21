@@ -3,7 +3,12 @@ from typing import overload
 
 class Setting:
     @overload
-    def __init__(self, name: str, default_value: bool, value: bool = None) -> None: ...
+    def __init__(
+        self, 
+        name: str, 
+        default_value: bool, 
+        value: bool = None
+    ) -> None: ...
 
     @overload
     def __init__(

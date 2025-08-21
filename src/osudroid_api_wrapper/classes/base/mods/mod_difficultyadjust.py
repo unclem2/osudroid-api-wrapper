@@ -25,6 +25,18 @@ class ModDifficultyAdjust(Mod):
         self.settings.add_setting(
             Setting(name="hp", value=hp, min_value=0.0, max_value=11.0, step=0.1)
         )
+        self.settings.add_setting(
+            Setting(name="approach_rate", value=ar, min_value=0.0, max_value=12.5, step=0.1)
+        )
+        self.settings.add_setting(
+            Setting(name="circle_size", value=cs, min_value=0.0, max_value=15.0, step=0.1)
+        )
+        self.settings.add_setting(
+            Setting(name="overall_difficulty", value=od, min_value=0.0, max_value=11.0, step=0.1)
+        )
+        self.settings.add_setting(
+            Setting(name="drain_rate", value=hp, min_value=0.0, max_value=11.0, step=0.1)
+        )
         self.is_ranked = False
 
     @property
@@ -34,6 +46,30 @@ class ModDifficultyAdjust(Mod):
         stats = ", ".join(
             f"{setting.name.upper()}{setting.value}"
             for setting in self.settings
-            if (setting.value is not None and setting.value != setting.default_value)
+            if (setting.value is not None and setting.value != setting.default_value and setting.name not in ["approach_rate", "circle_size", "overall_difficulty", "drain_rate"])
         )
         return f"{string}({stats})" if stats else string
+
+    @property
+    @override
+    def as_calculatable(self) -> dict:
+        ret = {
+            "acronym": self.acronym,
+        }
+        if self.settings.as_calculatable:
+            for setting in self.settings:
+                if setting.name not in ["ar", "cs", "od", "hp"]:
+                    ret[setting.name] = setting.value
+        return ret
+
+    @property
+    @override
+    def as_droid_mod(self) -> dict:
+        ret = {
+            "acronym": self.acronym,
+        }
+        if self.settings.as_calculatable:
+            for setting in self.settings:
+                if setting.name not in ["approach_rate", "circle_size", "overall_difficulty", "drain_rate"]:
+                    ret[setting.name] = setting.value
+        return ret

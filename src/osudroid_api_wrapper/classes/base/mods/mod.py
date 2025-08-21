@@ -70,6 +70,16 @@ class Mod(ABC):
         if self.__settings.as_calculatable:
             ret["settings"] = self.__settings.as_calculatable
         return ret
+    
+    @property
+    def as_droid_mod(self) -> dict:
+        """Return the mod in a format suitable for osu!droid."""
+        ret = {
+            "acronym": self.__acronym,
+        }
+        if self.__settings.as_calculatable:
+            ret["settings"] = self.__settings.as_calculatable
+        return ret
 
     @property
     def settings(self) -> SettingsList:
