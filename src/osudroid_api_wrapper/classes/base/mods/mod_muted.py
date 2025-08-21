@@ -20,6 +20,7 @@ class ModMuted(Mod):
         self.settings.add_setting(
             Setting(
                 name="inverseMuting",
+                calculable_name="inverse_muting",
                 default_value=False,
                 value=inverseMuting,
             )
@@ -27,6 +28,7 @@ class ModMuted(Mod):
         self.settings.add_setting(
             Setting(
                 name="enableMetronome",
+                calculable_name="enable_metronome",
                 default_value=False,
                 value=enableMetronome,
             )
@@ -34,6 +36,7 @@ class ModMuted(Mod):
         self.settings.add_setting(
             Setting(
                 name="muteComboCount",
+                calculable_name="mute_combo_count",
                 default_value=100,
                 value=muteComboCount,
                 min_value=0,
@@ -44,6 +47,7 @@ class ModMuted(Mod):
         self.settings.add_setting(
             Setting(
                 name="affectsHitSounds",
+                calculable_name="affects_hit_sounds",
                 default_value=False,
                 value=affectsHitSounds,
             )

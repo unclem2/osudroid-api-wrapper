@@ -29,14 +29,14 @@ class SettingsList:
         for setting in self.__settings:
             if setting.name == name:
                 return setting
-            if name in setting.alternative_names:
+            if name == setting.calculable_name:
                 return setting
         return None
 
     def remove_setting(self, name: str):
         """Remove a setting by its name."""
         self.__settings = [
-            setting for setting in self.__settings if setting.name != name and name not in setting.alternative_names
+            setting for setting in self.__settings if setting.name != name and name != setting.calculable_name
         ]
 
     def set_value(self, name: str, value: bool | int | float | str):
@@ -53,12 +53,12 @@ class SettingsList:
         return [setting.as_json for setting in self.__settings]
 
     @property
-    def as_calculatable(self) -> dict:
+    def as_calculable(self) -> dict:
         """Return the settings in a format suitable for calculations."""
         ret = {}
         for setting in self.__settings:
             if setting.value is not None and setting.value != setting.default_value:
-                ret[setting.name] = setting.value
+                ret.update(setting.as_calculable)
         if ret == {}:
             return None
         return ret

@@ -1,7 +1,7 @@
 from .mod import Mod
 from .settings import Setting
 from enum import Enum
-from typing import override
+from typing import Optional, override
 
 
 class ApproachStyle(Enum):
@@ -25,7 +25,7 @@ class ApproachStyle(Enum):
 class ModApproachDifferent(Mod):
     """ModApproachDifferent class represents the approach different mod in osu!droid."""
 
-    def __init__(self, scale: float = None, style: ApproachStyle = None):
+    def __init__(self, scale: Optional[float] = None, style: Optional[ApproachStyle] = None):
         super().__init__()
         self.name = "Approach Different"
         self.acronym = "AD"
@@ -40,6 +40,7 @@ class ModApproachDifferent(Mod):
                 step=0.1,
             )
         )
+        #TODO value must be string
         self.settings.add_setting(
             Setting(
                 name="style",
@@ -55,4 +56,4 @@ class ModApproachDifferent(Mod):
     @override
     def as_standard_mod(self):
         # This mod have options, but for some reason it is not displayed in the game
-        return self.__acronym
+        return self.acronym

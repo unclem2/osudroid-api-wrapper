@@ -13,6 +13,7 @@ class ModFlashlight(Mod):
         self.settings.add_setting(
             Setting(
                 name="areaFollowDelay",
+                calculable_name="follow_delay",
                 min_value=0.12,
                 max_value=1.2,
                 default_value=0.12,

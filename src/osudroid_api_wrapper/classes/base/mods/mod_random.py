@@ -24,6 +24,7 @@ class ModRandom(Mod):
         self.settings.add_setting(
             Setting(
                 name="angleSharpness",
+                calculable_name="angle_sharpness",
                 default_value=7.0,
                 value=angle_sharpness,
                 min_value=1.0,

@@ -13,6 +13,7 @@ class ModHidden(Mod):
         self.settings.add_setting(
             Setting(
                 name="isOnlyFadeApproachCircles",
+                calculable_name="only_fade_approach_circles",
                 default_value=False,
                 value=isOnlyFadeApproachCircles,
             )

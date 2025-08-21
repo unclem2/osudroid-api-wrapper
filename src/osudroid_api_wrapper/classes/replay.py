@@ -326,7 +326,7 @@ class Replay:
             ):
                 continue
             if key == "converted_mods":
-                string += f"{key}: {value.as_calculatable_mods} \n"
+                string += f"{key}: {value.as_calculable_mods} \n"
                 continue
             string += f"{key}: {value} \n"
         return string

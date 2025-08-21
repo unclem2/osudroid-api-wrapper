@@ -245,11 +245,11 @@ class ModList:
         return "".join(mod.as_standard_mod for mod in self.__mods if mod.acronym)
 
     @property
-    def as_calculatable_mods(self) -> list:
+    def as_calculable_mods(self) -> list:
         """Return the mod list as a string of mods suitable for pp calculation."""
         if not self.__mods:
             return []
-        return [mod.as_calculatable for mod in self.__mods]
+        return [mod.as_calculable for mod in self.__mods]
 
     @property
     def as_droid_mods(self) -> list:
@@ -263,7 +263,7 @@ class ModList:
         """Return the mod list as a JSON string."""
         if not self.__mods:
             return "[]"
-        return json.dumps(self.as_calculatable_mods, separators=(",", ":"))
+        return json.dumps(self.as_calculable_mods, separators=(",", ":"))
 
     def __iter__(self):
         """Iterate over the mods."""

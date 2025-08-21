@@ -6,7 +6,7 @@ class Setting:
     def __init__(
         self,
         name: str,
-        alternative_names: list[str] = None,
+        calculable_name: str = None,
         default_value: bool = None,
         value: bool = None
     ) -> None: ...
@@ -15,7 +15,7 @@ class Setting:
     def __init__(
         self,
         name: str,
-        alternative_names: list[str] = None,
+        calculable_name: str = None,
         default_value: int = None,
         min_value: int = None,
         max_value: int = None,
@@ -27,7 +27,7 @@ class Setting:
     def __init__(
         self,
         name: str,
-        alternative_names: list[str] = None,
+        calculable_name: str = None,
         default_value: float = None,
         min_value: float = None,
         max_value: float = None,
@@ -38,7 +38,7 @@ class Setting:
     def __init__(
         self,
         name: str,
-        alternative_names: list[str] = None,
+        calculable_name: str = None,
         default_value=None,
         min_value=None,
         max_value=None,
@@ -46,7 +46,7 @@ class Setting:
         value=None,
     ) -> None:
         self.__name = name
-        self.__alternative_names = alternative_names
+        self.__calculable_name = calculable_name
         self.__default_value = default_value
         self.__min = min_value
         self.__max = max_value
@@ -93,9 +93,9 @@ class Setting:
         return self.__step
 
     @property
-    def alternative_names(self) -> list[str] | None:
-        """Alternative names for the setting."""
-        return self.__alternative_names if self.__alternative_names else []
+    def calculable_name(self) -> str | None:
+        """Name used for pp calculations."""
+        return self.__calculable_name
 
     @property
     def as_json(self) -> dict:
@@ -110,9 +110,9 @@ class Setting:
         }
 
     @property
-    def as_calculatable(self) -> dict:
+    def as_calculable(self) -> dict:
         """Return the setting as a dictionary for pp calculations."""
         return {
-            "name": self.__name,
+            "name": self.__calculable_name or self.__name,
             "value": self.value,
         }

@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 def test_modlist_from_droid_site():
 
     mods_data = [
+        
         {"acronym": "PR"},
         {"acronym": "FL", "settings": {"areaFollowDelay": 0.96}},
         {"acronym": "HT"},
@@ -41,9 +42,10 @@ def test_modlist_from_droid_site():
     ]
     mod_list = ModList.from_dict(mods_data)
     logger.info(mod_list.as_json)
-    logger.info(mod_list.as_calculatable_mods)
+    logger.info(mod_list.as_calculable_mods)
     logger.info(mod_list.as_standard_mods)
     assert isinstance(mod_list.as_json, list)
-    assert isinstance(mod_list.as_calculatable_mods, list)
+    assert isinstance(mod_list.as_calculable_mods, list)
     assert isinstance(mod_list.as_standard_mods, str)
     assert len(mod_list.mods) == len(mods_data)
+

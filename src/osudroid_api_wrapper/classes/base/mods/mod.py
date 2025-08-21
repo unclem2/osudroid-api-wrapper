@@ -62,13 +62,13 @@ class Mod(ABC):
         return self.__acronym
 
     @property
-    def as_calculatable(self) -> dict:
+    def as_calculable(self) -> dict:
         """Return the mod in a format suitable for pp calculation."""
         ret = {
             "acronym": self.__acronym,
         }
-        if self.__settings.as_calculatable:
-            ret["settings"] = self.__settings.as_calculatable
+        if self.__settings.as_calculable:
+            ret["settings"] = self.__settings.as_calculable
         return ret
     
     @property
@@ -77,8 +77,8 @@ class Mod(ABC):
         ret = {
             "acronym": self.__acronym,
         }
-        if self.__settings.as_calculatable:
-            ret["settings"] = self.__settings.as_calculatable
+        if self.__settings.as_calculable:
+            ret["settings"] = self.__settings.as_calculable
         return ret
 
     @property

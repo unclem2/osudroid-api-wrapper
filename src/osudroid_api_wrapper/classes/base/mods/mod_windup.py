@@ -14,6 +14,7 @@ class ModWindUp(Mod):
         self.settings.add_setting(
             Setting(
                 name="initialRate",
+                calculable_name="initial_rate",
                 default_value=1.0,
                 value=initialRate,
                 min_value=0.5,
@@ -24,6 +25,7 @@ class ModWindUp(Mod):
         self.settings.add_setting(
             Setting(
                 name="finalRate",
+                calculable_name="final_rate",
                 default_value=1.5,
                 value=finalRate,
                 min_value=0.55,

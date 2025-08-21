@@ -14,15 +14,17 @@ class FlippedAxes(Enum):
 
 class ModMirror(Mod):
     """ModMirror class represents the mirror mod in osu!droid."""
-
+    
     def __init__(self, flippedAxes: FlippedAxes = None):
         super().__init__()
         self.name = "Mirror"
         self.acronym = "MR"
         self.is_ranked = False
+        #TODO value must be string
         self.settings.add_setting(
             Setting(
                 name="flippedAxes",
+                calculable_name="reflection",
                 default_value=FlippedAxes.HORIZONTAL,
                 value=flippedAxes,
                 min_value=0,
