@@ -63,6 +63,17 @@ class SettingsList:
             return None
         return ret
 
+    @property
+    def as_droid(self) -> dict:
+        """Return the settings in a format suitable for osu!droid."""
+        ret = {}
+        for setting in self.__settings:
+            if setting.value is not None and setting.value != setting.default_value:
+                ret.update(setting.as_droid)
+        if ret == {}:
+            return None
+        return ret
+    
     def __iter__(self):
         """Iterate over the settings."""
         return iter(self.__settings)

@@ -115,3 +115,10 @@ class Setting:
         return { 
             self.__calculable_name or self.__name: self.value,
         }
+
+    @property
+    def as_droid(self) -> dict:
+        """Return the setting as a dictionary suitable for osu!droid."""
+        return {
+            self.__name: self.value
+        }

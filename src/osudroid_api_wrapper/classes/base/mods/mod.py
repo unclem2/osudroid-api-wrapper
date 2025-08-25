@@ -77,8 +77,8 @@ class Mod(ABC):
         ret = {
             "acronym": self.__acronym,
         }
-        if self.__settings.as_calculable:
-            ret["settings"] = self.__settings.as_calculable
+        if self.__settings.as_droid:
+            ret["settings"] = self.__settings.as_droid
         return ret
 
     @property
