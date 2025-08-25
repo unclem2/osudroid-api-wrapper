@@ -112,7 +112,6 @@ class Setting:
     @property
     def as_calculable(self) -> dict:
         """Return the setting as a dictionary for pp calculations."""
-        return {
-            "name": self.__calculable_name or self.__name,
-            "value": self.value,
+        return { 
+            self.__calculable_name or self.__name: self.value,
         }
