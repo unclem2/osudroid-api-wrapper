@@ -1,5 +1,5 @@
 """Rewrite of the CursorOccurrenceGroup class of rian8337/osu-droid-replay-analyzer
-https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorOccurrenceGroup.ts
+https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorOccurrenceGroup.ts.
 
 MIT License
 
@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import List, Optional
+
 from .cursoroccurrence import CursorOccurrence
 from .movementtype import MovementType
 
@@ -33,9 +33,9 @@ class CursorOccurrenceGroup:
     def __init__(
         self,
         down: CursorOccurrence,
-        moves: List[CursorOccurrence],
-        up: Optional[CursorOccurrence] = None,
-    ):
+        moves: list[CursorOccurrence],
+        up: CursorOccurrence | None = None,
+    ) -> None:
         self._down = down
         self._moves = moves
         self.down = down
@@ -46,26 +46,28 @@ class CursorOccurrenceGroup:
         return self._down
 
     @down.setter
-    def down(self, value: CursorOccurrence):
+    def down(self, value: CursorOccurrence) -> None:
         if value.id != MovementType.DOWN:
+            msg = "Attempting to set the down cursor occurrence to one with a different movement type."
             raise TypeError(
-                "Attempting to set the down cursor occurrence to one with a different movement type."
+                msg,
             )
         self._down = value
 
     @property
-    def moves(self) -> List[CursorOccurrence]:
+    def moves(self) -> list[CursorOccurrence]:
         return self._moves
 
     @property
-    def up(self) -> Optional[CursorOccurrence]:
+    def up(self) -> CursorOccurrence | None:
         return self._up
 
     @up.setter
-    def up(self, value: Optional[CursorOccurrence]):
+    def up(self, value: CursorOccurrence | None) -> None:
         if value and value.id != MovementType.UP:
+            msg = "Attempting to set the up cursor occurrence to one with a different movement type."
             raise TypeError(
-                "Attempting to set the up cursor occurrence to one with a different movement type."
+                msg,
             )
         self._up = value
 
@@ -86,7 +88,7 @@ class CursorOccurrenceGroup:
         return self.end_time - self.start_time
 
     @property
-    def all_occurrences(self) -> List[CursorOccurrence]:
+    def all_occurrences(self) -> list[CursorOccurrence]:
         cursors = [self._down, *self._moves]
         if self._up:
             cursors.append(self._up)
@@ -95,7 +97,7 @@ class CursorOccurrenceGroup:
     def is_active_at(self, time: int) -> bool:
         return self.start_time <= time <= self.end_time
 
-    def cursor_at(self, time: int) -> Optional[CursorOccurrence]:
+    def cursor_at(self, time: int) -> CursorOccurrence | None:
         if not self.is_active_at(time):
             return None
 

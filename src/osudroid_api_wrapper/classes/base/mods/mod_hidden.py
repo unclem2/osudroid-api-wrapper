@@ -1,12 +1,13 @@
+from typing import override
+
 from .mod import Mod
 from .settings import Setting
-from typing import override
 
 
 class ModHidden(Mod):
     """ModHidden class represents the hidden mod in osu!droid."""
 
-    def __init__(self, isOnlyFadeApproachCircles: bool = False):
+    def __init__(self, isOnlyFadeApproachCircles: bool = False) -> None:
         super().__init__()
         self.name = "Hidden"
         self.acronym = "HD"
@@ -16,7 +17,7 @@ class ModHidden(Mod):
                 calculable_name="only_fade_approach_circles",
                 default_value=False,
                 value=isOnlyFadeApproachCircles,
-            )
+            ),
         )
 
     @property

@@ -1,4 +1,4 @@
-"""Partial rewrite of the rian8337/osu-droid-replay-analyzer on python
+"""Partial rewrite of the rian8337/osu-droid-replay-analyzer on python.
 
 https://github.com/Rian8337/osu-droid-module/tree/master/packages/osu-droid-replay-analyzer
 
@@ -25,28 +25,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import javaobj.v2
-import javaobj.v2.transformers
-from stream_unzip import stream_unzip
-import javaobj
-import struct
-import json
 import io
+import json
+import struct
+
+import javaobj.v2
+from stream_unzip import stream_unzip
+
 from .base.modlist import ModList
-from .replay_data.movementtype import MovementType
+from .base.mods import ModCustomSpeed, ModDifficultyAdjust, ModFlashlight, ModReplayV6
 from .replay_data.cursordata import CursorData
 from .replay_data.hitresult import HitResult
+from .replay_data.movementtype import MovementType
 from .replay_data.replayobjectdata import ReplayObjectData
-from .base.mods import ModDifficultyAdjust, ModFlashlight, ModCustomSpeed, ModReplayV6
 
 
 class Replay:
-    def __init__(self):
+    def __init__(self) -> None:
         self.replay_file = None
         self.replay_obj = None
-        self.map: str = None
-        self.file_name: str = None
-        self.md5: str = None
+        self.map: str = ""
+        self.file_name: str = ""
+        self.md5: str = ""
         self.unix_date: int = 0
         self.hit300k: int = 0
         self.hit300: int = 0
@@ -56,14 +56,21 @@ class Replay:
         self.hit0: int = 0
         self.score: int = 0
         self.combo: int = 0
-        self.rank: str = None
+        self.rank: str = ""
         self.accuracy: float = 0.0
-        self.username: str = None
+        self.username: str = ""
         self.parsed_mods: list = []
         self.converted_mods: ModList = None
         self.__buffer_offset: int = 0
         self.cursor_data: list = []
         self.hit_result_data: list = []
+        self.version: int = 0
+        self.force_ar: float | None = None
+        self.force_cs: float | None = None
+        self.force_od: float | None = None
+        self.force_hp: float | None = None
+        self.speed_multiplier: float | None = None
+        self.fl_delay: float | None = None
 
     def __zipped_chunks(self, filename):
         with open(filename, "rb") as f:
@@ -74,7 +81,7 @@ class Replay:
         total_hits = self.hit300 + self.hit100 + self.hit50 + self.hit0
         have_h_mods = False
         for mod in self.converted_mods:
-            if mod.acronym == "HD" or mod.acronym == "FL":
+            if mod.acronym in {"HD", "FL"}:
                 have_h_mods = True
                 break
         hit300ratio = self.hit300 / total_hits
@@ -82,30 +89,29 @@ class Replay:
         if hit300ratio == 1:
             self.rank = "XH" if have_h_mods else "X"
             return self
-        elif hit300ratio >= 0.9:
+        if hit300ratio >= 0.9:
             if self.hit50 / total_hits <= 0.01 and self.hit0 == 0:
                 self.rank = "SH" if have_h_mods else "S"
                 return self
             self.rank = "A"
             return self
-        elif hit300ratio >= 0.8:
+        if hit300ratio >= 0.8:
             if self.hit0 == 0:
                 self.rank = "A"
                 return self
             self.rank = "B"
             return self
-        elif hit300ratio >= 0.7:
+        if hit300ratio >= 0.7:
             if self.hit0 == 0:
                 self.rank = "B"
                 return self
             self.rank = "C"
             return self
-        elif hit300ratio >= 0.6:
+        if hit300ratio >= 0.6:
             self.rank = "C"
             return self
-        else:
-            self.rank = "D"
-            return self
+        self.rank = "D"
+        return self
 
     def __read_byte(self, replay_data):
         replay_data.seek(self.__buffer_offset)
@@ -127,18 +133,18 @@ class Replay:
         self.__buffer_offset += 4
         return struct.unpack(">f", replay_data.read(4))[0]
 
-    def __parse_movement_data(self, replay_data):
+    def __parse_movement_data(self, replay_data) -> None:
         replay_data = io.BytesIO(replay_data)
         size = self.__read_int(replay_data)
 
         # copypasta begins here
-        for i in range(size):
+        for _i in range(size):
             move_size = self.__read_int(replay_data)
             time = []
             x = []
             y = []
             id = []
-            for j in range(0, move_size):
+            for j in range(move_size):
                 time.append(self.__read_int(replay_data))
                 id.append(time[j] & 3)
                 time[j] >>= 2
@@ -154,19 +160,19 @@ class Replay:
                     y.append(-1)
 
             cursor_data = CursorData(
-                {"size": move_size, "time": time, "x": x, "y": y, "id": id}
+                {"size": move_size, "time": time, "x": x, "y": y, "id": id},
             ).to_dict
 
             self.cursor_data.append(cursor_data["occurrence_groups"])
 
-    def __parse_hitresult_data(self, replay_data):
+    def __parse_hitresult_data(self, replay_data) -> None:
         replay_data = io.BytesIO(replay_data)
 
         hitobject_data_lenght = self.__read_int(replay_data)
 
-        for i in range(hitobject_data_lenght):
+        for _i in range(hitobject_data_lenght):
             replay_object_data = ReplayObjectData(
-                accuracy=0.0, tickset=[], result=HitResult.MISS
+                accuracy=0.0, tickset=[], result=HitResult.MISS,
             )
             replay_object_data.accuracy = self.__read_short(replay_data)
             len = self.__read_byte(replay_data)
@@ -177,30 +183,29 @@ class Replay:
                     bytes.append(self.__read_byte(replay_data))
                 for j in range(len * 8):
                     replay_object_data.tickset.append(
-                        (bytes[len - round(j / 8) - 1] & (1 << round(j % 8))) != 0
+                        (bytes[len - round(j / 8) - 1] & (1 << round(j % 8))) != 0,
                     )
 
             replay_object_data.result = HitResult(self.__read_byte(replay_data))
             if replay_object_data.result == HitResult.WHY:
-                print("reached the end of hitresult data, most likely a bug")
+                pass
             self.hit_result_data.append(replay_object_data.to_dict)
 
     @classmethod
-    def load(cls, filename):
+    def load(cls, filename) -> "Replay":
 
         replay = cls()
         replay.replay_file = filename
 
-        for file_name, file_size, unzipped_chunks in stream_unzip(
-            replay.__zipped_chunks(filename)
+        for _file_name, _file_size, unzipped_chunks in stream_unzip(
+            replay.__zipped_chunks(filename),
         ):
-
             data_buffer = io.BytesIO()
 
             try:
                 for chunk in unzipped_chunks:
                     data_buffer.write(chunk)
-            except Exception as e:
+            except Exception:
                 break
 
         replay.replay_obj = javaobj.v2.loads(data_buffer.getvalue())
@@ -226,7 +231,7 @@ class Replay:
                 replay.score,
                 replay.combo,
             ) = struct.unpack(
-                ">Qiiiiiiii", io.BytesIO(replay.replay_obj[4].data).read(40)
+                ">Qiiiiiiii", io.BytesIO(replay.replay_obj[4].data).read(40),
             )
             replay.username = replay.replay_obj[5].value
 
@@ -242,7 +247,7 @@ class Replay:
                 replay.converted_mods.add_mod(ModReplayV6())
             else:
                 replay.converted_mods = ModList.from_dict(
-                    json.loads(replay.replay_obj[6].value)
+                    json.loads(replay.replay_obj[6].value),
                 )
             replay.accuracy = round(
                 (
@@ -271,7 +276,7 @@ class Replay:
                 if modifier.startswith("x"):
                     replay.speed_multiplier = float(modifier.replace("x", "") or 1)
                     replay.converted_mods.add_mod(
-                        ModCustomSpeed(rateMultiplier=replay.speed_multiplier)
+                        ModCustomSpeed(rateMultiplier=replay.speed_multiplier),
                     )
 
                 if modifier.startswith("FLD"):
@@ -280,7 +285,7 @@ class Replay:
                         fl.settings.set_value("areaFollowDelay", replay.fl_delay)
                     else:
                         replay.converted_mods.add_mod(
-                            ModFlashlight(areaFollowDelay=replay.fl_delay)
+                            ModFlashlight(areaFollowDelay=replay.fl_delay),
                         )
             if (
                 hasattr(replay, "force_ar")
@@ -294,13 +299,13 @@ class Replay:
                         cs=replay.force_cs if hasattr(replay, "force_cs") else None,
                         od=replay.force_od if hasattr(replay, "force_od") else None,
                         hp=replay.force_hp if hasattr(replay, "force_hp") else None,
-                    )
+                    ),
                 )
 
         buffer_index = 0
         if replay.version <= 2:
             buffer_index = 4
-        elif replay.version == 3 or replay.version == 7:
+        elif replay.version in {3, 7}:
             buffer_index = 7
         elif replay.version >= 4 and replay.version <= 6:
             buffer_index = 8
@@ -310,19 +315,15 @@ class Replay:
             replay_data.write(replay.replay_obj[i].data)
 
         replay.__parse_movement_data(replay_data.getvalue())
-        print(replay.__buffer_offset)
         replay.__parse_hitresult_data(replay_data.getvalue())
 
         return replay
 
-    def __str__(self):
+    def __str__(self) -> str:
         string = ""
         for key, value in self.__dict__.items():
             if (
-                key == "replay_obj"
-                or key == "replay_file"
-                or key == "cursor_data"
-                or key == "hit_result_data"
+                key in {"replay_obj", "replay_file", "cursor_data", "hit_result_data"}
             ):
                 continue
             if key == "converted_mods":

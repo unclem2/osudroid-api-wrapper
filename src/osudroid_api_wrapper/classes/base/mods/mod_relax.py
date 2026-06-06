@@ -4,7 +4,7 @@ from .mod import Mod
 class ModRelax(Mod):
     """ModRelax class represents the relax mod in osu!droid."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.name = "Relax"
         self.acronym = "RX"

@@ -1,13 +1,14 @@
-import bs4
 import datetime
+
+import bs4
 import requests
 
 
 class Player:
-    def __init__(self):
+    def __init__(self) -> None:
         self.uid: int = 0
-        self.username: str = None
-        self.country: str = None
+        self.username: str = ""
+        self.country: str = ""
         self.score_rank: int = 0
         self.pp_rank: int = 0
         self.country_rank: int = 0
@@ -15,8 +16,8 @@ class Player:
         self.total_score: int = 0
         self.playcount: int = 0
         self.accuracy: float = 0.0
-        self.registered_on: int = 0
-        self.last_login: int = 0
+        self.registered_on: int | float = 0
+        self.last_login: int | float = 0
 
     def __parse(self, soup):
         text_content = soup.get_text()
@@ -29,17 +30,17 @@ class Player:
             text_content[score_rank_index + len("Score Rank:") :]
             .splitlines()[0]
             .strip()
-            .replace("#", "")
+            .replace("#", ""),
         )
         pp_rank_index = text_content.find("PP Rank:")
         self.pp_rank = int(
             text_content[pp_rank_index + len("PP Rank:") :]
             .splitlines()[0]
             .strip()
-            .replace("#", "")
+            .replace("#", ""),
         )
         self.username = soup.select_one(
-            "html body main div nav div div div:nth-of-type(3) div:nth-of-type(1) a:nth-of-type(1)"
+            "html body main div nav div div div:nth-of-type(3) div:nth-of-type(1) a:nth-of-type(1)",
         ).text
 
         table = soup.find("table")
@@ -50,7 +51,7 @@ class Player:
                 if columns:
                     if columns[0].text == "Performance Points":
                         self.pp = float(
-                            columns[1].text.replace(",", "").replace("pp", "")
+                            columns[1].text.replace(",", "").replace("pp", ""),
                         )
                     elif columns[0].text == "Ranked Score":
                         self.total_score = int(columns[1].text.replace(",", ""))
@@ -79,7 +80,7 @@ class Player:
         player.playcount = int(data["OverallPlaycount"])
         player.accuracy = float(data["OverallAccuracy"]) * 100
         player.registered_on = datetime.datetime.strptime(
-            data["Registered"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            data["Registered"], "%Y-%m-%dT%H:%M:%S.%fZ",
         ).timestamp()
         player.country = data["Region"]
         return player
@@ -95,18 +96,19 @@ class Player:
         return player
 
     @classmethod
-    def from_api(cls, uid: int = None, username: str = None) -> "Player":
+    def from_api(
+        cls, uid: int | None = None, username: str | None = None,
+    ) -> "Player":
         if username:
             url = f"https://new.osudroid.moe/apitest/profile-username/{username}"
         elif uid:
             url = f"https://new.osudroid.moe/apitest/profile-uid/{uid}"
         response = requests.get(url)
         data = response.json()
-        player = cls._from_api_response(data)
-        return player
+        return cls._from_api_response(data)
 
     @property
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             "uid": self.uid,
             "username": self.username,
@@ -117,4 +119,6 @@ class Player:
             "total_score": self.total_score,
             "playcount": self.playcount,
             "accuracy": self.accuracy,
+            "registered_on": self.registered_on,
+            "last_login": self.last_login,
         }

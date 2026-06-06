@@ -1,2 +1,2 @@
+from .classes import Beatmap, ModList, Player, Replay, Score, mods
 from .structs import Profile
-from .classes import Replay, Score, ModList, Player, Beatmap, mods

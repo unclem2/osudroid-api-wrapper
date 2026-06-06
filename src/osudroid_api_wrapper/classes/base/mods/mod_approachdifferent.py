@@ -1,7 +1,8 @@
+from enum import Enum
+from typing import override
+
 from .mod import Mod
 from .settings import Setting
-from enum import Enum
-from typing import Optional, override
 
 
 class ApproachStyle(Enum):
@@ -25,7 +26,9 @@ class ApproachStyle(Enum):
 class ModApproachDifferent(Mod):
     """ModApproachDifferent class represents the approach different mod in osu!droid."""
 
-    def __init__(self, scale: Optional[float] = None, style: Optional[ApproachStyle] = None):
+    def __init__(
+        self, scale: float | None = None, style: ApproachStyle | None = None,
+    ) -> None:
         super().__init__()
         self.name = "Approach Different"
         self.acronym = "AD"
@@ -38,9 +41,9 @@ class ModApproachDifferent(Mod):
                 min_value=1.5,
                 max_value=10.0,
                 step=0.1,
-            )
+            ),
         )
-        #TODO value must be string
+        # TODO value must be string
         self.settings.add_setting(
             Setting(
                 name="style",
@@ -49,7 +52,7 @@ class ModApproachDifferent(Mod):
                 min_value=0,
                 max_value=len(ApproachStyle) - 1,
                 step=1,
-            )
+            ),
         )
 
     @property

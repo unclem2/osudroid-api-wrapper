@@ -1,5 +1,5 @@
 """Rewrite of the MovementType class of rian8337/osu-droid-replay-analyzer
-https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/constants/MovementType.ts
+https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/constants/MovementType.ts.
 
 MIT License
 

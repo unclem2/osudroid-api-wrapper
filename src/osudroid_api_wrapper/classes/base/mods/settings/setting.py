@@ -6,39 +6,39 @@ class Setting:
     def __init__(
         self,
         name: str,
-        calculable_name: str = None,
-        default_value: bool = None,
-        value: bool = None
+        calculable_name: str | None = None,
+        default_value: bool | None = None,
+        value: bool | None = None,
     ) -> None: ...
 
     @overload
     def __init__(
         self,
         name: str,
-        calculable_name: str = None,
-        default_value: int = None,
-        min_value: int = None,
-        max_value: int = None,
-        step: int = None,
-        value: int = None,
+        calculable_name: str | None = None,
+        default_value: int | None = None,
+        min_value: int | None = None,
+        max_value: int | None = None,
+        step: int | None = None,
+        value: int | None = None,
     ) -> None: ...
 
     @overload
     def __init__(
         self,
         name: str,
-        calculable_name: str = None,
-        default_value: float = None,
-        min_value: float = None,
-        max_value: float = None,
-        step: float = None,
-        value: float = None,
+        calculable_name: str | None = None,
+        default_value: float | None = None,
+        min_value: float | None = None,
+        max_value: float | None = None,
+        step: float | None = None,
+        value: float | None = None,
     ) -> None: ...
 
     def __init__(
         self,
         name: str,
-        calculable_name: str = None,
+        calculable_name: str | None = None,
         default_value=None,
         min_value=None,
         max_value=None,
@@ -64,12 +64,14 @@ class Setting:
         return self.__value if self.__value is not None else self.__default_value
 
     @value.setter
-    def value(self, new_value):
+    def value(self, new_value) -> None:
         """Set the value of the setting."""
         if self.__min is not None and new_value < self.__min:
-            raise ValueError(f"Value must be at least {self.__min}.")
+            msg = f"Value must be at least {self.__min}."
+            raise ValueError(msg)
         if self.__max is not None and new_value > self.__max:
-            raise ValueError(f"Value must be at most {self.__max}.")
+            msg = f"Value must be at most {self.__max}."
+            raise ValueError(msg)
         self.__value = new_value
 
     @property
@@ -112,13 +114,11 @@ class Setting:
     @property
     def as_calculable(self) -> dict:
         """Return the setting as a dictionary for pp calculations."""
-        return { 
+        return {
             self.__calculable_name or self.__name: self.value,
         }
 
     @property
     def as_droid(self) -> dict:
         """Return the setting as a dictionary suitable for osu!droid."""
-        return {
-            self.__name: self.value
-        }
+        return {self.__name: self.value}

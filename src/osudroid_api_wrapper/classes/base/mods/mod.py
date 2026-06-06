@@ -1,12 +1,12 @@
-from abc import ABC, abstractmethod
-from typing import List
+from abc import ABC
+
 from .settings.settings_list import SettingsList
 
 
 class Mod(ABC):
     """Base class for all mods."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__name: str = None
         self.__acronym: str = None
         self.__settings: SettingsList = SettingsList()
@@ -18,10 +18,11 @@ class Mod(ABC):
         return self.__name
 
     @name.setter
-    def name(self, new_name: str):
+    def name(self, new_name: str) -> None:
         """Set the name of the mod."""
         if self.__name is not None:
-            raise ValueError("Name can only be set once.")
+            msg = "Name can only be set once."
+            raise ValueError(msg)
         self.__name = new_name
 
     @property
@@ -30,19 +31,20 @@ class Mod(ABC):
         return self.__acronym
 
     @acronym.setter
-    def acronym(self, new_acronym: str):
+    def acronym(self, new_acronym: str) -> None:
         """Set the acronym of the mod."""
         if self.__acronym is not None:
-            raise ValueError("Acronym can only be set once.")
+            msg = "Acronym can only be set once."
+            raise ValueError(msg)
         self.__acronym = new_acronym
 
     @property
     def is_ranked(self) -> bool:
-        """Submit status of the mod"""
+        """Submit status of the mod."""
         return self.__is_ranked
 
     @is_ranked.setter
-    def is_ranked(self, new_is_ranked: bool):
+    def is_ranked(self, new_is_ranked: bool) -> None:
         """Set the ranked status of the mod."""
         self.__is_ranked = new_is_ranked
 
@@ -70,7 +72,7 @@ class Mod(ABC):
         if self.__settings.as_calculable:
             ret["settings"] = self.__settings.as_calculable
         return ret
-    
+
     @property
     def as_droid_mod(self) -> dict:
         """Return the mod in a format suitable for osu!droid."""
@@ -87,14 +89,15 @@ class Mod(ABC):
         return self.__settings
 
     @settings.setter
-    def settings(self, new_settings: SettingsList):
+    def settings(self, new_settings: SettingsList) -> None:
         """Set the settings of the mod."""
         if not isinstance(new_settings, SettingsList):
-            raise TypeError("Settings must be an instance of SettingsList.")
+            msg = "Settings must be an instance of SettingsList."
+            raise TypeError(msg)
         self.__settings = new_settings
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__name}({self.settings})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.__name}({self.settings})"

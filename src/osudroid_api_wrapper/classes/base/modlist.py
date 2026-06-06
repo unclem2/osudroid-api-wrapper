@@ -1,3 +1,6 @@
+import json
+import re
+
 from .mods import (
     Mod,
     ModApproachDifferent,
@@ -8,39 +11,34 @@ from .mods import (
     ModDoubleTime,
     ModEasy,
     ModFlashlight,
-    ModHardRock,
+    ModFreezeFrame,
     ModHalfTime,
+    ModHardRock,
     ModHidden,
+    ModMirror,
     ModMuted,
     ModNightcore,
     ModNoFail,
     ModPerfect,
     ModPrecise,
+    ModRandom,
     ModReallyEasy,
     ModRelax,
     ModScoreV2,
+    ModSmallCircles,
     ModSuddenDeath,
     ModSynesthesia,
     ModTraceable,
     ModWindDown,
     ModWindUp,
-    ModRandom,
-    ModMirror,
-    ModFreezeFrame,
-    ModSmallCircles,
-    ModReplayV6,
 )
-from typing import List
-import re
-import json
 
 # TODO: Fix mod order, remove repeated mapping declarations, check acronyms, add missing mods
 
 
 class ModList:
-
-    def __init__(self, mods=None):
-        self.__mods: List[Mod] = mods
+    def __init__(self, mods=None) -> None:
+        self.__mods: list[Mod] = mods
 
     @classmethod
     def from_droid_site(cls, mods: str):
@@ -74,7 +72,8 @@ class ModList:
                 mod_list.append(mod_abbreviations[mod]())
 
             else:
-                raise ValueError(f"Unknown mod: {mod}")
+                msg = f"Unknown mod: {mod}"
+                raise ValueError(msg)
 
         return cls(mod_list)
 
@@ -98,20 +97,20 @@ class ModList:
             "MOD_REALLYEASY": ModReallyEasy,
             "MOD_SMALLCIRCLES": ModSmallCircles,
             "MOD_PERFECT": ModPerfect,
-            "MOD_SUDDENDEATH": ModSuddenDeath,
         }
         mod_list = []
         for mod in mods:
             if mod in mod_mapping:
                 mod_list.append(mod_mapping[mod]())
             else:
-                raise ValueError(f"Unknown mod: {mod}")
+                msg = f"Unknown mod: {mod}"
+                raise ValueError(msg)
 
         return cls(mod_list)
 
     @classmethod
     def from_dict(cls, mods: list):
-        mod_classes: List[type[Mod]] = [
+        mod_classes: list[type[Mod]] = [
             ModEasy,
             ModHalfTime,
             ModNoFail,
@@ -153,8 +152,9 @@ class ModList:
                     try:
                         mod_instance.settings.set_value(key, value)
                     except ValueError as e:
+                        msg = f"Invalid setting '{key}' for mod '{acronym}': {e}"
                         raise ValueError(
-                            f"Invalid setting '{key}' for mod '{acronym}': {e}"
+                            msg,
                         )
                 mod_list.append(mod_instance)
 
@@ -188,7 +188,8 @@ class ModList:
             if char in mod_mapping:
                 mod_list.append(mod_mapping[char]())
             else:
-                raise ValueError(f"Unknown mod character: {char}")
+                msg = f"Unknown mod character: {char}"
+                raise ValueError(msg)
 
         matchar = re.search(r"\bAR(\d+\.\d+)\b", mods)
         matchcs = re.search(r"\bCS(\d+\.\d+)\b", mods)
@@ -207,13 +208,12 @@ class ModList:
             mod_list.append(da)
         if matchsm:
             mod_list.append(ModCustomSpeed(float(matchsm.group(1))))
-        if matchfld:
-            if mod_list.count(ModFlashlight) == 0:
-                mod_list.append(ModFlashlight(matchfld.group(1)))
+        if matchfld and mod_list.count(ModFlashlight) == 0:
+            mod_list.append(ModFlashlight(matchfld.group(1)))
         return cls(mod_list)
 
     @property
-    def mods(self) -> List[Mod]:
+    def mods(self) -> list[Mod]:
         """List of mods."""
         return self.__mods
 
@@ -224,14 +224,15 @@ class ModList:
                 return mod
         return None
 
-    def add_mod(self, mod: Mod):
+    def add_mod(self, mod: Mod) -> None:
         """Add a new mod to the list."""
         if not isinstance(mod, Mod):
-            raise TypeError("mod must be an instance of Mod.")
+            msg = "mod must be an instance of Mod."
+            raise TypeError(msg)
         self.__mods.append(mod)
 
     @property
-    def as_json(self) -> List[dict]:
+    def as_json(self) -> list[dict]:
         """Return the mod list as a JSON serializable list with full mod details."""
         if not self.__mods:
             return []

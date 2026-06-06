@@ -1,12 +1,13 @@
+from typing import override
+
 from .mod import Mod
 from .settings import Setting
-from typing import override
 
 
 class ModWindUp(Mod):
     """ModWindUp class represents the wind up mod in osu!droid."""
 
-    def __init__(self, initialRate: float = None, finalRate: float = None):
+    def __init__(self, initialRate: float | None = None, finalRate: float | None = None) -> None:
         super().__init__()
         self.name = "Wind Up"
         self.acronym = "WU"
@@ -20,7 +21,7 @@ class ModWindUp(Mod):
                 min_value=0.5,
                 max_value=1.95,
                 step=0.05,
-            )
+            ),
         )
         self.settings.add_setting(
             Setting(
@@ -31,7 +32,7 @@ class ModWindUp(Mod):
                 min_value=0.55,
                 max_value=2.0,
                 step=0.05,
-            )
+            ),
         )
 
     @property

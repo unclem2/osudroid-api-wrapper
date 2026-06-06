@@ -4,7 +4,7 @@ from .mod import Mod
 class ModPrecise(Mod):
     """ModPrecise class represents the precise mod in osu!droid."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.name = "Precise"
         self.acronym = "PR"

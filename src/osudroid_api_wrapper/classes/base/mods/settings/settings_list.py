@@ -1,27 +1,28 @@
+
 from .setting import Setting
-from typing import List
 
 
 class SettingsList:
     """SettingsList class represents a collection of settings for mods in osu!droid."""
 
-    def __init__(self):
-        self.__settings: List[Setting] = []
+    def __init__(self) -> None:
+        self.__settings: list[Setting] = []
 
-    def add_setting(self, setting: Setting):
+    def add_setting(self, setting: Setting) -> None:
         """Add a new setting to the list."""
         self.settings.append(setting)
 
     @property
-    def settings(self) -> List[Setting]:
+    def settings(self) -> list[Setting]:
         """List of settings."""
         return self.__settings
 
     @settings.setter
-    def settings(self, new_settings: List[Setting]):
+    def settings(self, new_settings: list[Setting]) -> None:
         """Set the list of settings."""
         if not isinstance(new_settings, list):
-            raise TypeError("Settings must be a list of Setting objects.")
+            msg = "Settings must be a list of Setting objects."
+            raise TypeError(msg)
         self.__settings = new_settings
 
     def get_setting(self, name: str) -> Setting | None:
@@ -33,19 +34,22 @@ class SettingsList:
                 return setting
         return None
 
-    def remove_setting(self, name: str):
+    def remove_setting(self, name: str) -> None:
         """Remove a setting by its name."""
         self.__settings = [
-            setting for setting in self.__settings if setting.name != name and name != setting.calculable_name
+            setting
+            for setting in self.__settings
+            if name not in (setting.name, setting.calculable_name)
         ]
 
-    def set_value(self, name: str, value: bool | int | float | str):
+    def set_value(self, name: str, value: bool | float | str) -> None:
         """Set the value of a setting by its name."""
         setting = self.get_setting(name)
         if setting:
             setting.value = value
         else:
-            raise ValueError(f"Setting '{name}' not found.")
+            msg = f"Setting '{name}' not found."
+            raise ValueError(msg)
 
     @property
     def as_json(self) -> list:
@@ -73,7 +77,7 @@ class SettingsList:
         if ret == {}:
             return None
         return ret
-    
+
     def __iter__(self):
         """Iterate over the settings."""
         return iter(self.__settings)

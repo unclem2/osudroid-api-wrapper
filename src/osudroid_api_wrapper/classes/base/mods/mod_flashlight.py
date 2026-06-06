@@ -1,12 +1,13 @@
-from .mod import Mod
-from .settings import SettingsList, Setting
 from typing import override
+
+from .mod import Mod
+from .settings import Setting
 
 
 class ModFlashlight(Mod):
     """ModFlashlight class represents the flashlight mod in osu!droid."""
 
-    def __init__(self, areaFollowDelay: float = None):
+    def __init__(self, areaFollowDelay: float | None = None) -> None:
         super().__init__()
         self.name = "Flashlight"
         self.acronym = "FL"
@@ -19,7 +20,7 @@ class ModFlashlight(Mod):
                 default_value=0.12,
                 value=areaFollowDelay,
                 step=0.12,
-            )
+            ),
         )
 
     @property

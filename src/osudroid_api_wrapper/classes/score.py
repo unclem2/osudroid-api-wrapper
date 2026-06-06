@@ -1,12 +1,15 @@
-from .base.player import Player
-from .base.beatmap import Beatmap
-from .base.modlist import ModList
 import datetime
-from typing import List
+from typing import TYPE_CHECKING
+
+from .base.modlist import ModList
+
+if TYPE_CHECKING:
+    from .base.beatmap import Beatmap
+    from .base.player import Player
 
 
 class Score:
-    def __init__(self):
+    def __init__(self) -> None:
         self.scoreid: int = 0
         self.filename: str = None
         self.h300k: int = 0
@@ -22,16 +25,16 @@ class Score:
         self.mods: ModList = None
         self.accuracy: float = 0.0
         self.pp: float = 0.0
-        self.date: int = 0
+        self.date: int | float = 0
         self.grade: str = None
         self.misses: int = 0
         self.md5: str = None
 
     @classmethod
-    def _parse_from_bsoup(cls, soup, ptype: str = "Recent Plays") -> "List[Score]":
+    def _parse_from_bsoup(cls, soup, ptype: str = "Recent Plays") -> "list[Score]":
         scores = []
         divs = soup.find_all(
-            "div", style="text-align: center; margin-left: 5px; margin-top: 30px;"
+            "div", style="text-align: center; margin-left: 5px; margin-top: 30px;",
         )
         top_div = next(
             (
@@ -48,7 +51,7 @@ class Score:
 
         top_div = top_div.find_next_sibling()
         for li in top_div.find_all(
-            "li", class_="li", style="margin-left: 15px; margin-right: 10px;"
+            "li", class_="li", style="margin-left: 15px; margin-right: 10px;",
         ):
             score = cls()
             score.grade = (
@@ -62,7 +65,7 @@ class Score:
                 small_element = inner_div.find("small", style="margin-left: 50px;")
                 details_lines = small_element.get_text(strip=True).split(" / ")
                 score.date = datetime.datetime.strptime(
-                    details_lines[0], "%Y-%m-%d %H:%M:%S"
+                    details_lines[0], "%Y-%m-%d %H:%M:%S",
                 ).timestamp()
                 score.pp = (
                     float(details_lines[1].replace("pp: ", "").replace(",", ""))
@@ -70,16 +73,16 @@ class Score:
                     else 0.0
                 )
                 score.score = int(
-                    details_lines[2].replace("score:", "").replace(",", "")
+                    details_lines[2].replace("score:", "").replace(",", ""),
                 )
                 score.mods = ModList.from_droid_site(
-                    details_lines[3].replace("mod: ", "")
+                    details_lines[3].replace("mod: ", ""),
                 )
                 score.combo = int(
-                    details_lines[4].replace("combo:", "").replace("x", "")
+                    details_lines[4].replace("combo:", "").replace("x", ""),
                 )
                 score.accuracy = float(
-                    details_lines[5].replace("accuracy:", "").replace("%", "")
+                    details_lines[5].replace("accuracy:", "").replace("%", ""),
                 )
                 score.misses = (
                     inner_div.find("small", style="color: #A82C2A;")
@@ -115,7 +118,7 @@ class Score:
         score.pp = data.get("MapPP", 0)
         score.md5 = data.get("MapHash", None)
         score.date = datetime.datetime.strptime(
-            data["PlayedDate"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            data["PlayedDate"], "%Y-%m-%dT%H:%M:%S.%fZ",
         ).timestamp()
 
         return score
@@ -135,7 +138,7 @@ class Score:
             "player": self.player.to_dict,
             "score": self.score,
             "combo": self.combo,
-            "mods": self.mods.to_dict,
+            "mods": self.mods.as_json,
             "accuracy": self.accuracy,
             "pp": self.pp,
             "date": self.date,

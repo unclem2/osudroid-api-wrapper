@@ -1,5 +1,5 @@
 """Rewrite of the CursorOccurrence, Vector classes of rian8337/osu-droid-replay-analyzer
-https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorOccurrence.ts
+https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorOccurrence.ts.
 
 MIT License
 
@@ -27,7 +27,7 @@ SOFTWARE.
 
 
 class Vector:
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
 
@@ -37,7 +37,7 @@ class Vector:
 
 
 class CursorOccurrence:
-    def __init__(self, x, y, time, id):
+    def __init__(self, x, y, time, id) -> None:
         self.position = Vector(x, y)
         self.time = time
         self.id = id

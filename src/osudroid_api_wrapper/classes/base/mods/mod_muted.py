@@ -1,6 +1,7 @@
+from typing import override
+
 from .mod import Mod
 from .settings import Setting
-from typing import override
 
 
 class ModMuted(Mod):
@@ -12,7 +13,7 @@ class ModMuted(Mod):
         enableMetronome: bool = False,
         muteComboCount: int = 100,
         affectsHitSounds: bool = False,
-    ):
+    ) -> None:
         super().__init__()
         self.name = "Muted"
         self.acronym = "MU"
@@ -23,7 +24,7 @@ class ModMuted(Mod):
                 calculable_name="inverse_muting",
                 default_value=False,
                 value=inverseMuting,
-            )
+            ),
         )
         self.settings.add_setting(
             Setting(
@@ -31,7 +32,7 @@ class ModMuted(Mod):
                 calculable_name="enable_metronome",
                 default_value=False,
                 value=enableMetronome,
-            )
+            ),
         )
         self.settings.add_setting(
             Setting(
@@ -42,7 +43,7 @@ class ModMuted(Mod):
                 min_value=0,
                 max_value=500,
                 step=1,
-            )
+            ),
         )
         self.settings.add_setting(
             Setting(
@@ -50,7 +51,7 @@ class ModMuted(Mod):
                 calculable_name="affects_hit_sounds",
                 default_value=False,
                 value=affectsHitSounds,
-            )
+            ),
         )
 
     @property

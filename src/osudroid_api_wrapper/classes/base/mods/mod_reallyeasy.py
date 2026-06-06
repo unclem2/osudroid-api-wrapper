@@ -4,7 +4,7 @@ from .mod import Mod
 class ModReallyEasy(Mod):
     """ModReallyEasy class represents the really-easy mod in osu!droid."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.name = "Really Easy"
         self.acronym = "RE"

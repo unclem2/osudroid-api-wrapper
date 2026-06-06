@@ -1,7 +1,8 @@
 from .mod import Mod
 
+
 class ModSmallCircles(Mod):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.acronym = "SC"
         self.name = "Small Circles"

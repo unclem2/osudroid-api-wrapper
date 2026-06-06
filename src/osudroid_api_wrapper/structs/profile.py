@@ -1,17 +1,18 @@
-from ..classes.score import Score
-from ..classes.base.player import Player
-from typing import List
+
 import bs4
 import requests
 
+from osudroid_api_wrapper.classes.base.player import Player
+from osudroid_api_wrapper.classes.score import Score
+
 
 class Profile:
-    def __init__(self):
+    def __init__(self) -> None:
         self.player: Player = Player()
         self.recent_scores = []
         self.top_scores = []
 
-    def __get_recent_scores(self, soup) -> List[Score]:
+    def __get_recent_scores(self, soup) -> list[Score]:
         recent_scores = Score._parse_from_bsoup(soup, "Recent Plays")
         player = Player._parse_from_bsoup(soup)
         for score in recent_scores:
@@ -19,7 +20,7 @@ class Profile:
         self.recent_scores = recent_scores
         return recent_scores
 
-    def __get_top_scores(self, soup) -> List[Score]:
+    def __get_top_scores(self, soup) -> list[Score]:
         top_scores = Score._parse_from_bsoup(soup, "Top Plays")
         player = Player._parse_from_bsoup(soup)
         for score in top_scores:
@@ -28,7 +29,7 @@ class Profile:
         return top_scores
 
     @classmethod
-    def from_api(cls, uid: int = None, username: str = None) -> "Profile":
+    def from_api(cls, uid: int | None = None, username: str | None = None) -> "Profile":
         profile = cls()
         if username:
             url = f"https://new.osudroid.moe/api2/frontend/profile-username/{username}"

@@ -1,12 +1,13 @@
+from typing import override
+
 from .mod import Mod
 from .settings import Setting
-from typing import override
 
 
 class ModRandom(Mod):
     """ModRandom class represents the random mod in osu!droid."""
 
-    def __init__(self, seed: int = None, angle_sharpness: float = None):
+    def __init__(self, seed: int | None = None, angle_sharpness: float | None = None) -> None:
         super().__init__()
         self.name = "Random"
         self.acronym = "RD"
@@ -19,7 +20,7 @@ class ModRandom(Mod):
                 min_value=0,
                 max_value=4294967295,
                 step=1,
-            )
+            ),
         )
         self.settings.add_setting(
             Setting(
@@ -30,7 +31,7 @@ class ModRandom(Mod):
                 min_value=1.0,
                 max_value=10.0,
                 step=0.1,
-            )
+            ),
         )
 
     @property

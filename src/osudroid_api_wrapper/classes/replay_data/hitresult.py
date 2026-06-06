@@ -1,5 +1,5 @@
 """Rewrite of the HitResult class of rian8337/osu-droid-replay-analyzer
-https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/constants/HitResult.ts
+https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/constants/HitResult.ts.
 
 MIT License
 

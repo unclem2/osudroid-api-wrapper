@@ -1,29 +1,58 @@
+from typing import override
+
 from .mod import Mod
 from .settings import Setting
-from typing import override
 
 
 class ModDifficultyAdjust(Mod):
     """ModDifficultyAdjust class represents the difficulty adjustment mod in osu!droid."""
 
     def __init__(
-        self, ar: float = None, cs: float = None, od: float = None, hp: float = None
-    ):
+        self, ar: float | None = None, cs: float | None = None, od: float | None = None, hp: float | None = None,
+    ) -> None:
 
         super().__init__()
         self.name = "Difficulty Adjust"
         self.acronym = "DA"
         self.settings.add_setting(
-            Setting(name="ar", calculable_name="approach_rate", value=ar, min_value=0.0, max_value=12.5, step=0.1)
+            Setting(
+                name="ar",
+                calculable_name="approach_rate",
+                value=ar,
+                min_value=0.0,
+                max_value=12.5,
+                step=0.1,
+            ),
         )
         self.settings.add_setting(
-            Setting(name="cs", calculable_name="circle_size", value=cs, min_value=0.0, max_value=15.0, step=0.1)
+            Setting(
+                name="cs",
+                calculable_name="circle_size",
+                value=cs,
+                min_value=0.0,
+                max_value=15.0,
+                step=0.1,
+            ),
         )
         self.settings.add_setting(
-            Setting(name="od", calculable_name="overall_difficulty", value=od, min_value=0.0, max_value=11.0, step=0.1)
+            Setting(
+                name="od",
+                calculable_name="overall_difficulty",
+                value=od,
+                min_value=0.0,
+                max_value=11.0,
+                step=0.1,
+            ),
         )
         self.settings.add_setting(
-            Setting(name="hp", calculable_name="drain_rate", value=hp, min_value=0.0, max_value=11.0, step=0.1)
+            Setting(
+                name="hp",
+                calculable_name="drain_rate",
+                value=hp,
+                min_value=0.0,
+                max_value=11.0,
+                step=0.1,
+            ),
         )
         self.is_ranked = False
 
@@ -37,4 +66,3 @@ class ModDifficultyAdjust(Mod):
             if (setting.value is not None and setting.value != setting.default_value)
         )
         return f"{string}({stats})" if stats else string
-

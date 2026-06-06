@@ -1,7 +1,8 @@
-from .mod import Mod
 from enum import Enum
-from .settings import Setting
 from typing import override
+
+from .mod import Mod
+from .settings import Setting
 
 
 class FlippedAxes(Enum):
@@ -14,13 +15,13 @@ class FlippedAxes(Enum):
 
 class ModMirror(Mod):
     """ModMirror class represents the mirror mod in osu!droid."""
-    
-    def __init__(self, flippedAxes: FlippedAxes = None):
+
+    def __init__(self, flippedAxes: FlippedAxes = None) -> None:
         super().__init__()
         self.name = "Mirror"
         self.acronym = "MR"
         self.is_ranked = False
-        #TODO value must be string
+        # TODO value must be string
         self.settings.add_setting(
             Setting(
                 name="flippedAxes",
@@ -30,7 +31,7 @@ class ModMirror(Mod):
                 min_value=0,
                 max_value=2,
                 step=1,
-            )
+            ),
         )
 
     @property
@@ -39,7 +40,8 @@ class ModMirror(Mod):
         axis = self.settings.get_setting("flippedAxes").value
         if axis == FlippedAxes.HORIZONTAL.value:
             return f"{self.acronym}(↔)"
-        elif axis == FlippedAxes.VERTICAL.value:
+        if axis == FlippedAxes.VERTICAL.value:
             return f"{self.acronym}(↕)"
-        elif axis == FlippedAxes.BOTH.value:
+        if axis == FlippedAxes.BOTH.value:
             return f"{self.acronym}(↔↕)"
+        return None

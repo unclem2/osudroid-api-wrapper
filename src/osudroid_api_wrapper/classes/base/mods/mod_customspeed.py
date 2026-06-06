@@ -1,12 +1,13 @@
+from typing import override
+
 from .mod import Mod
 from .settings import Setting
-from typing import override
 
 
 class ModCustomSpeed(Mod):
     """ModCustomSpeed class represents the custom speed mod in osu!droid."""
 
-    def __init__(self, rateMultiplier: float = None):
+    def __init__(self, rateMultiplier: float | None = None) -> None:
         super().__init__()
         self.name = "Custom Speed"
         self.acronym = "CS"
@@ -18,10 +19,10 @@ class ModCustomSpeed(Mod):
                 min_value=0.5,
                 max_value=2.0,
                 step=0.05,
-            )
+            ),
         )
 
     @property
     @override
-    def as_standard_mod(self):
+    def as_standard_mod(self) -> str:
         return f"{self.acronym}(x{self.settings.get_setting('rateMultiplier').value})"

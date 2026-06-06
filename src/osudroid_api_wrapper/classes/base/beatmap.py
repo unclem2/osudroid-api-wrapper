@@ -24,15 +24,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import dotenv
 import os
+
+import dotenv
 import requests
 
 dotenv.load_dotenv()
 
 
 class Beatmap:
-    def __init__(self):
+    def __init__(self) -> None:
         self.beatmap_id: int = None
         self.beatmapset_id: int = None
         self.md5: str = None
@@ -50,14 +51,17 @@ class Beatmap:
         self.length: int = None
 
     @classmethod
-    def get_beatmap(cls, beatmap_id: int = None, md5: str = None) -> "Beatmap":
+    def get_beatmap(
+        cls, beatmap_id: int | None = None, md5: str | None = None,
+    ) -> "Beatmap | None":
         key = os.getenv("OSU_API_KEY")
 
         beatmap = cls()
         url = "https://old.ppy.sh/api/get_beatmaps"
-        if key is "":
+        if key == "":
+            msg = "API key is not set. Please set the OSU_API_KEY environment variable."
             raise ValueError(
-                "API key is not set. Please set the OSU_API_KEY environment variable."
+                msg,
             )
         if beatmap_id is not None:
             params = {"k": key, "b": beatmap_id}
@@ -96,7 +100,7 @@ class Beatmap:
         return beatmap
 
     @property
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             "beatmap_id": self.beatmap_id,
             "beatmapset_id": self.beatmapset_id,

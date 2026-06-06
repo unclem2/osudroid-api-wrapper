@@ -1,6 +1,5 @@
-"""
-Rewrite of the CursorData class of rian8337/osu-droid-replay-analyzer
-https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorData.ts
+"""Rewrite of the CursorData class of rian8337/osu-droid-replay-analyzer
+https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/CursorData.ts.
 
 MIT License
 
@@ -26,17 +25,17 @@ SOFTWARE.
 
 """
 
-from typing import List, Optional
+
 from .cursoroccurrence import CursorOccurrence
 from .cursoroccurrencegroup import CursorOccurrenceGroup
 from .movementtype import MovementType
 
 
 class CursorData:
-    def __init__(self, values: dict):
-        self.occurrence_groups: List[CursorOccurrenceGroup] = []
-        down_occurrence: Optional[CursorOccurrence] = None
-        move_occurrences: List[CursorOccurrence] = []
+    def __init__(self, values: dict) -> None:
+        self.occurrence_groups: list[CursorOccurrenceGroup] = []
+        down_occurrence: CursorOccurrence | None = None
+        move_occurrences: list[CursorOccurrence] = []
 
         for i in range(values["size"]):
             occurrence = CursorOccurrence(
@@ -57,7 +56,7 @@ class CursorData:
                             down=down_occurrence,
                             moves=move_occurrences,
                             up=occurrence,
-                        )
+                        ),
                     )
                     down_occurrence = None
                 move_occurrences = []
@@ -65,15 +64,15 @@ class CursorData:
         # Handle any remaining occurrences
         if down_occurrence and move_occurrences:
             self.occurrence_groups.append(
-                CursorOccurrenceGroup(down=down_occurrence, moves=move_occurrences)
+                CursorOccurrenceGroup(down=down_occurrence, moves=move_occurrences),
             )
 
     @property
-    def earliest_occurrence_time(self) -> Optional[int]:
+    def earliest_occurrence_time(self) -> int | None:
         return self.occurrence_groups[0].start_time if self.occurrence_groups else None
 
     @property
-    def latest_occurrence_time(self) -> Optional[int]:
+    def latest_occurrence_time(self) -> int | None:
         return self.occurrence_groups[-1].end_time if self.occurrence_groups else None
 
     @property
@@ -84,7 +83,7 @@ class CursorData:
         )
 
     @property
-    def all_occurrences(self) -> List[CursorOccurrence]:
+    def all_occurrences(self) -> list[CursorOccurrence]:
         return [
             occurrence
             for group in self.occurrence_groups
@@ -94,5 +93,5 @@ class CursorData:
     @property
     def to_dict(self):
         return {
-            "occurrence_groups": [group.to_dict for group in self.occurrence_groups]
+            "occurrence_groups": [group.to_dict for group in self.occurrence_groups],
         }

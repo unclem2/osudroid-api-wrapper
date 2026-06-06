@@ -4,7 +4,7 @@ from .mod import Mod
 class ModSynesthesia(Mod):
     """ModSynesthesia class represents the synesthesia mod in osu!droid."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.name = "Synesthesia"
         self.acronym = "SY"

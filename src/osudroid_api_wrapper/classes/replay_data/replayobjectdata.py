@@ -1,5 +1,5 @@
 """Rewrite of the ReplayObjectData class of rian8337/osu-droid-replay-analyzer
-https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/ReplayObjectData.ts
+https://github.com/Rian8337/osu-droid-module/blob/master/packages/osu-droid-replay-analyzer/src/data/ReplayObjectData.ts.
 
 MIT License
 
@@ -24,20 +24,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+
 from . import hitresult
-from typing import Optional, List
 
 
 class ReplayObjectData:
-
     def __init__(
         self,
-        accuracy: Optional[float],
-        tickset: Optional[List[bool]],
+        accuracy: float | None,
+        tickset: list[bool] | None,
         result: hitresult.HitResult,
-    ):
+    ) -> None:
         self.accuracy: float = accuracy
-        self.tickset: List[bool] = tickset
+        self.tickset: list[bool] = tickset
         self.result: hitresult.HitResult = result
 
     @property
