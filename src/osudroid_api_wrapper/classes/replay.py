@@ -305,7 +305,7 @@ class Replay:
         buffer_index = 0
         if replay.version <= 2:
             buffer_index = 4
-        elif replay.version in {3, 7}:
+        elif replay.version in {3, 7, 8}:
             buffer_index = 7
         elif replay.version >= 4 and replay.version <= 6:
             buffer_index = 8
