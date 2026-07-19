@@ -1,7 +1,7 @@
 from typing import override
 
 from .mod import Mod
-from .settings import Setting
+from .settings.da_setting import DifficultyAdjustSetting
 
 
 class ModDifficultyAdjust(Mod):
@@ -15,7 +15,7 @@ class ModDifficultyAdjust(Mod):
         self.name = "Difficulty Adjust"
         self.acronym = "DA"
         self.settings.add_setting(
-            Setting(
+            DifficultyAdjustSetting(
                 name="ar",
                 calculable_name="approach_rate",
                 value=ar,
@@ -25,7 +25,7 @@ class ModDifficultyAdjust(Mod):
             ),
         )
         self.settings.add_setting(
-            Setting(
+            DifficultyAdjustSetting(
                 name="cs",
                 calculable_name="circle_size",
                 value=cs,
@@ -35,7 +35,7 @@ class ModDifficultyAdjust(Mod):
             ),
         )
         self.settings.add_setting(
-            Setting(
+            DifficultyAdjustSetting(
                 name="od",
                 calculable_name="overall_difficulty",
                 value=od,
@@ -45,7 +45,7 @@ class ModDifficultyAdjust(Mod):
             ),
         )
         self.settings.add_setting(
-            Setting(
+            DifficultyAdjustSetting(
                 name="hp",
                 calculable_name="drain_rate",
                 value=hp,

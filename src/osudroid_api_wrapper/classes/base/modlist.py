@@ -1,6 +1,10 @@
 import json
 import re
 
+from osudroid_api_wrapper.classes.base.mods.settings.da_setting import (
+    DifficultyAdjustSetting,
+)
+
 from .mods import (
     Mod,
     ModApproachDifferent,
@@ -36,14 +40,45 @@ from .mods import (
 # TODO: Fix mod order, remove repeated mapping declarations, check acronyms, add missing mods
 
 
+mod_classes: list[type[Mod]] = [
+            ModEasy,
+            ModHalfTime,
+            ModNoFail,
+            ModReallyEasy,
+            ModDoubleTime,
+            ModFlashlight,
+            ModHardRock,
+            ModHidden,
+            ModNightcore,
+            ModPerfect,
+            ModPrecise,
+            ModSuddenDeath,
+            ModTraceable,
+            ModAuto,
+            ModAutopilot,
+            ModRelax,
+            ModCustomSpeed,
+            ModDifficultyAdjust,
+            ModMirror,
+            ModRandom,
+            ModScoreV2,
+            ModApproachDifferent,
+            ModFreezeFrame,
+            ModMuted,
+            ModSynesthesia,
+            ModWindDown,
+            ModWindUp,
+        ]
+
+
 class ModList:
     def __init__(self, mods=None) -> None:
         self.__mods: list[Mod] = mods
 
     @classmethod
-    def from_droid_site(cls, mods: str):
+    def from_droid_site(cls, mods: str) -> "ModList":
 
-        mod_abbreviations: dict[str, type[Mod]] = {
+        mod_abbreviations: dict[str, type[Mod] | str] = {
             "None": "",
             "Easy": ModEasy,
             "HalfTime": ModHalfTime,
@@ -78,7 +113,7 @@ class ModList:
         return cls(mod_list)
 
     @classmethod
-    def from_droid_replay_v6(cls, mods: list):
+    def from_droid_replay_v6(cls, mods: list) -> "ModList":
         mod_mapping = {
             "MOD_NOFAIL": ModNoFail,
             "MOD_EASY": ModEasy,
@@ -109,36 +144,7 @@ class ModList:
         return cls(mod_list)
 
     @classmethod
-    def from_dict(cls, mods: list):
-        mod_classes: list[type[Mod]] = [
-            ModEasy,
-            ModHalfTime,
-            ModNoFail,
-            ModReallyEasy,
-            ModDoubleTime,
-            ModFlashlight,
-            ModHardRock,
-            ModHidden,
-            ModNightcore,
-            ModPerfect,
-            ModPrecise,
-            ModSuddenDeath,
-            ModTraceable,
-            ModAuto,
-            ModAutopilot,
-            ModRelax,
-            ModCustomSpeed,
-            ModDifficultyAdjust,
-            ModMirror,
-            ModRandom,
-            ModScoreV2,
-            ModApproachDifferent,
-            ModFreezeFrame,
-            ModMuted,
-            ModSynesthesia,
-            ModWindDown,
-            ModWindUp,
-        ]
+    def from_dict(cls, mods: list) -> "ModList":
 
         mod_mapping = {cls_().acronym: cls_() for cls_ in mod_classes}
 
@@ -148,6 +154,17 @@ class ModList:
             if acronym in mod_mapping:
                 mod_instance = mod_mapping[acronym]
                 settings = mod.get("settings", {})
+                if isinstance(mod, ModDifficultyAdjust):
+                    for key, value in settings.items():
+                        original = value.get("original")
+                        adjusted = value.get("adjusted")
+                        setting: DifficultyAdjustSetting = mod_instance.settings.get_setting(key)
+                        if not setting:
+                            continue
+                        setting.value = adjusted
+                        setting.original_value = original
+                        mod_instance.settings.remove_setting(key)
+                        mod_instance.settings.add_setting(setting)
                 for key, value in settings.items():
                     try:
                         mod_instance.settings.set_value(key, value)
@@ -161,7 +178,7 @@ class ModList:
         return cls(mod_list)
 
     @classmethod
-    def from_droid_letters(cls, mods: str):
+    def from_droid_letters(cls, mods: str) -> "ModList":
         mod_mapping: dict[str, type[Mod]] = {
             "n": ModNoFail,
             "e": ModEasy,
@@ -210,6 +227,19 @@ class ModList:
             mod_list.append(ModCustomSpeed(float(matchsm.group(1))))
         if matchfld and mod_list.count(ModFlashlight) == 0:
             mod_list.append(ModFlashlight(matchfld.group(1)))
+        return cls(mod_list)
+
+    @classmethod
+    def from_standard_string(cls, mods: str) -> "ModList":
+        mod_mapping = {cls_().acronym: cls_() for cls_ in mod_classes}
+
+        mod_list = []
+
+        for i in range(0, len(mods), 2):
+            acronym = mods[i:i + 2]
+            if mod := mod_mapping.get(acronym):
+                mod_list.append(mod)
+
         return cls(mod_list)
 
     @property

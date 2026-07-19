@@ -63,8 +63,6 @@ class SettingsList:
         for setting in self.__settings:
             if setting.value is not None and setting.value != setting.default_value:
                 ret.update(setting.as_calculable)
-        if ret == {}:
-            return None
         return ret
 
     @property
@@ -74,8 +72,6 @@ class SettingsList:
         for setting in self.__settings:
             if setting.value is not None and setting.value != setting.default_value:
                 ret.update(setting.as_droid)
-        if ret == {}:
-            return None
         return ret
 
     def __iter__(self):
